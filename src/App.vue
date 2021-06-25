@@ -18,10 +18,16 @@
     <div class="navbar-menu" id="nav-links">
       <div class="navbar-end">
         <a class="navbar-item">My Account</a>
-        <a class="navbar-item">Shopping Cart ({{ cartNum }})</a>
+        <a class="navbar-item" @click="toggleCart">Shopping Cart ({{ cartNum }})</a>
       </div>
     </div>
   </nav>
+  <div v-if="showCart">
+    <Cart @close="toggleCart" :cartNum="cartNum"></Cart>
+  </div>
+  <div v-if="showAdded">
+    <Added @closeAdded="toggleAdded"></Added>
+  </div>
 
   <div class="section pt-4 pb-0">
     <nav class="breadcrumb has-arrow-separator">
@@ -53,7 +59,7 @@
           </div>
           <div class="column is-2">
             <ul style="max-height: 460px">
-              <li v-for="(img, key) in images">
+              <li v-for="img in images">
                 <img :src="img" @mouseover="mainImg = img" alt="image">
               </li>
             </ul>
@@ -67,6 +73,12 @@
             </div>
             <div class="block">
               <p>Price: {{ price }}</p>
+            </div>
+            <div class="block">
+              <p>Available amount: {{ availableItems }}</p>
+            </div>
+            <div class="block">
+              <button class="button is-danger" id="addToCart" @click="addToCart(),toggleAdded()">Add to cart</button>
             </div>
         </div>
       </div>
@@ -96,16 +108,20 @@
 </template>
 
 <script>
-//import HelloWorld from './components/HelloWorld.vue'
+import Cart from './components/Cart.vue'
+import Added from './components/Added.vue'
 export default {
   name: 'App',
-  //components: {
-    //HelloWorld
-  //}
+  components: {
+    Cart,
+    Added
+  },
   data(){
     return{
       cartNum: 0,
-      navmenuActive: false,
+      availableItems: 5,
+      showCart: false,
+      showAdded: false,
       mainImg: require('./assets/Yui/yui_1.jpg'),
       hovered: null,
       images: [
@@ -124,8 +140,18 @@ export default {
     burgerClick(){
       document.querySelector('#nav-links').classList.toggle('is-active');
     },
-    changeImg(){
-      
+    toggleCart(){
+      this.showCart = !this.showCart
+    },
+    toggleAdded(){
+      this.showAdded = !this.showAdded
+    },
+    addToCart(){
+      this.cartNum++
+      this.availableItems--
+      if(this.availableItems == 0) {
+        document.querySelector('#addToCart').setAttribute("disabled", true)
+      }
     }
   }
 }
@@ -140,27 +166,27 @@ export default {
   color: #2c3e50;
   margin-top: 60px;
 }*/
-ul {
+.column .is-2 ul {
   list-style-type: none;
   margin: 0;
   padding: 0;
   overflow: auto;
 }
-ul li img{
+.column .is-2 ul li img{
   border-radius: 3px; 
   max-height: 60px;
 }
-ul li img:hover {
+.column .is-2 ul li img:hover {
   border: solid orange;
 }
 @media (max-width:768px){
-  ul li {
+  .column .is-2 ul li {
     display: block;
     float: left;
     margin-left: auto;
     margin-right: auto;
   }
-  ul li img{
+  .column .is-2 ul li img{
     max-height: 80px;
   }
 }
