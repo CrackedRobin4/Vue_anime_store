@@ -23,7 +23,7 @@
     </div>
   </nav>
   <div v-if="showCart">
-    <Cart @close="toggleCart" :cartNum="cartNum"></Cart>
+    <Cart @close="toggleCart" @remove="removeFromCart" :cartNum="cartNum" :price="price"></Cart>
   </div>
   <div v-if="showAdded">
     <Added @closeAdded="toggleAdded"></Added>
@@ -72,7 +72,7 @@
             <h2 class="is-size-5 subtitle">"Yahallo!"</h2>
             </div>
             <div class="block">
-              <p>Price: {{ price }}</p>
+              <p>Price: {{ price }}$</p>
             </div>
             <div class="block">
               <p>Available amount: {{ availableItems }}</p>
@@ -133,7 +133,7 @@ export default {
         require('./assets/Yui/yui_6.jpg'),
         require('./assets/Yui/yui_7.jpg')
       ],
-      price: '38.99$',
+      price: 38.99,
     }
   },
   methods:{
@@ -151,6 +151,13 @@ export default {
       this.availableItems--
       if(this.availableItems == 0) {
         document.querySelector('#addToCart').setAttribute("disabled", true)
+      }
+    },
+    removeFromCart(){
+      this.cartNum--
+      this.availableItems++
+      if(this.availableItems > 0) {
+        document.querySelector('#addToCart').removeAttribute("disabled", true)
       }
     }
   }

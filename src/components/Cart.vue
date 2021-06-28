@@ -8,11 +8,10 @@
             </header>
             <section class="modal-card-body">
                 <p v-if="cartNum == 0"> Sorry, your Shopping Cart is empty</p>
-                <Item :cartNum="cartNum" v-if="cartNum > 0"></Item>
+                <Item @remove="removeFromCart" :cartNum="cartNum" :price="price" v-if="cartNum > 0"></Item>
             </section>
             <footer class="modal-card-foot">
-                <button class="button is-success">Save changes</button>
-                <button class="button">Cancel</button>
+                
             </footer>
         </div>
     </div>
@@ -24,11 +23,14 @@ export default {
     components: {
         Item
     },
-    props: ['cartNum'],
+    props: ['cartNum', 'price'],
     methods: {
        closeCart() {
            this.$emit('close')
-       } 
+       },
+       removeFromCart(){
+           this.$emit('remove')
+       }
     }
 }
 </script>

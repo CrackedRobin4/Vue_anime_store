@@ -7,7 +7,7 @@
                 <button class="delete" aria-label="close" @click="closeAdded"></button>
             </header>
             <section class="modal-card-body">
-                <h1>You succesfully added item to the shopping cart</h1>
+                <p>You succesfully added item to the shopping cart</p>
             </section>
             <footer class="modal-card-foot">
             </footer>
